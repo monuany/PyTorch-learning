@@ -1,0 +1,83 @@
+PyTorch 的运行依赖于Tensor, 通过建立不同维度的Tensor来实现
+>>> import torch
+>>> x = torch.empty(2)
+>>> print(x)
+tensor([1.9263e-19, 7.0376e+28])
+2表示建立一个1*2的张量，也就是1维；empty表示张量的值没有被初始化，可能是随机也可能是之前内存中的值。
+>>> x = torch.empty(2，2)
+表示建立了一个二维的2*2张量
+tensor([[7.7968e-35, 0.0000e+00],
+        [7.7970e-35, 0.0000e+00]])
+同理可以建立三维的，四维的等等
+
+torch.empty: 表示未初始化的，随机的或内存中值
+torch.zeros: 表示全零
+torch.ones: 表示全1
+torch.rand:表示随机
+
+>>> x=torch.ones(2,2)
+>>> print(x.dtype)
+torch.float32
+表示输出的是32位浮点数，dtype是输出类型
+
+torch可以指定输出的类型
+>>> x=torch.ones(2,2, dtype=torch.int)
+>>> print(x.dtype)
+torch.int32
+注:double对应的是float64;float16对应float16
+>>> print(x.size())
+torch.Size([2,2])
+输出的是x的大小                   
+
+新建Tensor的另一种方式是Torch.tensor
+>>> x = torch.tensor([2.5,0.1])
+>>> print(x)
+tensor([2.5000,0.1000)]
+
+Tensor的四则运算
+>>> x = torch.rand(2)
+>>> y = torch.rand(2)
+>>> z = torch.add(x,y)  #等价于z=x+y
+>>> y.add_(x) #等价于在y的基础上加x, 新结果覆盖了原来的y，也就是生成的y等于上一步输出的z
+>>> z = torch.sub(x,y)  #等价于z=x-y
+>>> z = torch.mul(x,y)  #等价于z=x*y
+>>> y.mul_(x) #等价于在y的基础上*x, 新结果覆盖了原来的y
+>>> z = torch.div(x,y)  #等价于z=x/y
+
+Tensor的Slice运算
+>>> x = torch.rand(5, 3)
+>>> print (x[:,0])
+输出的是5*3 Tensor中第一列【所有行*第一列】，是一个一维的输出
+>>> print (x[1,:])
+输出的是第二行的所有列，也就是第二行。注意Tensor中的行号和列号都是从0开始的。
+>>> print (x[1,1])
+tensor(0.6659)
+输出的是第二行第二列的一个数。如果Tensor中只有一个值，注意只有一个值，就可以写成 print(x[1,1].item()),这是会输出一个真值，也就是输出值前面不带tensor()
+>>> print(x[1,1].item())
+0.6658627986907959
+
+Tensor的Reshape
+>>> x = torch.rand(4, 4)
+>>> y = x.view(16)
+view可以变换张量的形状，在保持总元素数不变的前提下，view根据指定的形状进行修改，比如原来的x是4*4的，现在view(16)意思是改成16*1，也就是变成一维的，大小是16
+如果不确定某一个维度的大小，可以用-1作为占位符，PyTorch会自动推断，比如
+>>> y = x.view(-1, 2)
+由于第二维给了2，总共16个元素，会自动调整形状为8*2
+注意： view要求前后的元素数一致，且会生成一个新的张量
+
+numpy array和Tensor之间相互转换
+张量和numpy数列之间的转换
+>>> import torch
+>>> import numpy as np
+>>> a = torch.ones(5)
+>>> b = a.numpy()
+>>> print(type(b))
+<class 'numpy.ndarray'>
+>>> print(type(a))
+<class 'torch,Tensor'>
+>>> print(b.dtype)
+float32
+>>> print(a.dtype)
+torch.float32
+注：type输出的是对象的类，也就是这个变量是哪个类，而dtype指的是对象中的元素是什么类型，针对于单个元素，也就是数据的存储格式
+numpy数列和张量的数据存储格式默认的都是float32,只是张量要是torch.float32
