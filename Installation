@@ -1,0 +1,16 @@
+下载链接：https://pytorch.org/get-started/locally/
+
+conda create -n pytorch python=(python version)
+conda activate pytorch
+#paste the command from the website,like
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+#test if avalible,first change into python environment
+python
+>>> import torch
+#if there is nothing incorrect, successfully
+>>> x = torch.rand(3)
+>>> print(x)
+tensor([0.5907,0.0781,0.3094)] #successfully
+>>> torch.cuda.is_available() # confirm if cuda is available
+False
+#后续指定CPU就会True
